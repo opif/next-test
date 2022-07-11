@@ -12,8 +12,8 @@ jobs:
         with:
           outputDirectory: /tmp/artifacts
           urls: "https://www.foo.software,https://www.foo.software/contact"
-      - name: Upload artifacts
-        uses: actions/upload-artifact@master
+      - name: Post a friggin comment
+        uses: marocchino/sticky-pull-request-comment@v2
         with:
-          name: Lighthouse reports
-          path: /tmp/artifacts
+          message: |
+            Testing if ${{ github.sha }} for pr-${{ github.event.number }} works well.
