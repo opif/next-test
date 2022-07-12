@@ -6,14 +6,36 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - run: mkdir /tmp/artifacts
-      - name: Run Lighthouse
-        uses: foo-software/lighthouse-check-action@master
+      - name: Use Node.js
+        uses: actions/setup-node@v3
         with:
-          outputDirectory: /tmp/artifacts
-          urls: "https://www.foo.software,https://www.foo.software/contact"
+          node-version: 16.x
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Check project
+        run: npm run lint --if-present
+      - name: Build project
+        run: npm run build --if-present
+      - name: Test project
+        run: npm run test --if-present
       - name: Post a friggin comment
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           message: |
-            Testing if ${{ github.sha }} for pr-${{ github.event.number }} works well.
+            Testing if ${{ github.sha }} for pr-${{ github.event.number }} worked well.
+      - name: Deploy Preview to Vercel
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }} # Required
+          github-token: ${{ secrets.GITHUB_TOKEN }} #Optional
+          vercel-args: "--prod" #Optional
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID}} #Required
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}} #Required
+          working-directory: ./
+      - run: mkdir /tmp/artifacts
+      # - name: Run Lighthouse
+      #   uses: foo-software/lighthouse-check-action@master
+      #   with:
+      #     outputDirectory: /tmp/artifacts
+      #     urls: "https://www.foo.software,https://www.foo.software/contact"
