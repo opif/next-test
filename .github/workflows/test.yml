@@ -33,7 +33,7 @@ jobs:
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           message: |
-            Testing if ${{ github.sha }} for pr-${{ github.event.number }} worked well. |
+            Testing if ${{ github.sha }} for pr-${{ github.event.number }} worked well.
             The preview is available here: ${{ jobs.deploy-preview.outputs.preview-url }};
       - run: mkdir /tmp/artifacts
       # - name: Run Lighthouse
