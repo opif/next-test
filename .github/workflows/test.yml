@@ -58,7 +58,7 @@ jobs:
             Testing if ${{ github.sha }} for pr-${{ github.event.number }} worked well.
             The preview is available here: ${{ steps.deploy-preview.outputs.preview-url }};
 
-            Lighthouse Results: ${{ toJSON(steps.lighthouse-report.outputs.lighthouseCheckResults) }}
+            Lighthouse Results: ${{ steps.lighthouse-report.outputs.lighthouseCheckResults }}
       - name: "Upload Lighthouse Artifacts"
         uses: actions/upload-artifact@v3
         with:
