@@ -41,4 +41,4 @@ jobs:
         with:
           outputDirectory: /tmp/artifacts
           device: all
-          urls: ${{ steps.deploy-preview.outputs.preview-url }};
+          urls: ${{ steps.deploy-preview.outputs.preview-url }}
