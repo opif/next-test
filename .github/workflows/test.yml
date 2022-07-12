@@ -19,13 +19,9 @@ jobs:
         run: npm run build --if-present
       - name: Test project
         run: npm run test --if-present
-      - name: Post a friggin comment
-        uses: marocchino/sticky-pull-request-comment@v2
-        with:
-          message: |
-            Testing if ${{ github.sha }} for pr-${{ github.event.number }} worked well.
       - name: Deploy Preview to Vercel
         uses: amondnet/vercel-action@v20
+        id: deploy-preview
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }} # Required
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -33,6 +29,12 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID}} #Required
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}} #Required
           working-directory: ./
+      - name: Post a friggin comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          message: |
+            Testing if ${{ github.sha }} for pr-${{ github.event.number }} worked well. |
+            The preview is available here: ${{ jobs.deploy-preview.outputs.preview-url }};
       - run: mkdir /tmp/artifacts
       # - name: Run Lighthouse
       #   uses: foo-software/lighthouse-check-action@master
