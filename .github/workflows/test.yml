@@ -4,6 +4,8 @@ on: [pull_request]
 jobs:
   lighthouse-check:
     runs-on: ubuntu-latest
+    env:
+      LIGHTHOUSE_ARTIFACTS_PATH: /tmp/lighthouse-artifacts
     steps:
       - uses: actions/checkout@master
       - name: Use Node.js
@@ -34,10 +36,25 @@ jobs:
           message: |
             Testing if ${{ github.sha }} for pr-${{ github.event.number }} worked well.
             The preview is available here: ${{ steps.deploy-preview.outputs.preview-url }};
-      - run: mkdir /tmp/artifacts
+      - run: mkdir ${LIGHTHOUSE_ARTIFACTS_PATH}
       - name: Run Lighthouse
+        id: lighthouse-report
         uses: foo-software/lighthouse-check-action@master
         with:
-          outputDirectory: /tmp/artifacts
+          outputDirectory: ${LIGHTHOUSE_ARTIFACTS_PATH}
           device: all
           urls: ${{ steps.deploy-preview.outputs.preview-url }}
+      - name: Post a friggin comment \#2
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          message: |
+            Testing if ${{ github.sha }} for pr-${{ github.event.number }} worked well.
+            The preview is available here: ${{ steps.deploy-preview.outputs.preview-url }};
+
+            Lighthouse Results: ${{ toJSON(steps.lighthouse-report.outputs.lighthouseCheckResults) }}
+      - name: "Upload Artifact"
+        uses: actions/upload-artifact@v3
+        with:
+          name: Lighthouse reports
+          path: ${LIGHTHOUSE_ARTIFACTS_PATH}
+          retention-days: 5
