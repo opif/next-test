@@ -61,6 +61,10 @@ jobs:
             const selectBadgeColor = (score) => badgeColors.find(([threshold, color]) => score >= threshold)?.[1] || 'red';
             const createBadge = (label, score) => `![](https://img.shields.io/badge/${label}-${score}-${selectBadgeColor(score)}?style=flat-square)`;
             const formatResult = (result) => `## ${result.emulatedFormFactor}`;
+
+            lighthouseResults.data.map(result => )
+
+            return '';
       - name: Post a friggin comment
         uses: marocchino/sticky-pull-request-comment@v2
         with:
@@ -76,11 +80,3 @@ jobs:
           name: Lighthouse reports
           path: ${{ env.LIGHTHOUSE_ARTIFACTS_PATH }}
           retention-days: 5
-      - name: Post a friggin comment
-        uses: marocchino/sticky-pull-request-comment@v2
-        with:
-          message: |
-            Testing if ${{ github.sha }} for pr-${{ github.event.number }} worked well.
-            The preview is available here: ${{ steps.deploy-preview.outputs.preview-url }};
-
-            Lighthouse Results: ${{ toJSON(steps.upload-lighthouse.outputs) }}
