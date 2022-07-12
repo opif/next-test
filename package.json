@@ -5,6 +5,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "test": "true"
   },
   "dependencies": {
     "next": "latest",
