@@ -63,7 +63,7 @@ jobs:
             const formatResult = (result) => `## ${result.emulatedFormFactor}`;
 
 
-            lighthouseResults.data.map(result => formatResult(result));
+            lighthouseResults.data.map(result => )
       - name: Post a friggin comment
         uses: marocchino/sticky-pull-request-comment@v2
         with:
@@ -71,7 +71,7 @@ jobs:
             Testing if ${{ github.sha }} for pr-${{ github.event.number }} worked well.
             The preview is available here: ${{ steps.deploy-preview.outputs.preview-url }};
 
-            Lighthouse Results: ${{ toJSON(steps.lighthouse-report.outputs) }}
+            Lighthouse Results: ${{ steps.lighthouse-report.outputs.lighthouseCheckResults }}
       - name: "Upload Lighthouse Artifacts"
         id: upload-lighthouse
         uses: actions/upload-artifact@v3
@@ -79,3 +79,11 @@ jobs:
           name: Lighthouse reports
           path: ${{ env.LIGHTHOUSE_ARTIFACTS_PATH }}
           retention-days: 5
+      - name: Post a friggin comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          message: |
+            Testing if ${{ github.sha }} for pr-${{ github.event.number }} worked well.
+            The preview is available here: ${{ steps.deploy-preview.outputs.preview-url }};
+
+            Lighthouse Results: ${{ toJSON(steps.upload-lighthouse.outputs) }}
