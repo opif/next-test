@@ -43,8 +43,9 @@ jobs:
         with:
           outputDirectory: ${{ env.LIGHTHOUSE_ARTIFACTS_PATH }}
           device: all
+          gitHubAccessToken: ${{ secrets.GITHUB_TOKEN }}
           urls: ${{ steps.deploy-preview.outputs.preview-url }}
-      - name: Post a friggin comment #2
+      - name: Post a friggin comment
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           message: |
@@ -52,7 +53,7 @@ jobs:
             The preview is available here: ${{ steps.deploy-preview.outputs.preview-url }};
 
             Lighthouse Results: ${{ toJSON(steps.lighthouse-report.outputs.lighthouseCheckResults) }}
-      - name: "Upload Artifact"
+      - name: "Upload Lighthouse Artifacts"
         uses: actions/upload-artifact@v3
         with:
           name: Lighthouse reports
