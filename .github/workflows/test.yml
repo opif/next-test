@@ -28,11 +28,11 @@ jobs:
         uses: amondnet/vercel-action@v20
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }} # Required
-          github-token: ${{ secrets.GITHUB_TOKEN }} #Optional
-          vercel-args: "--prod" #Optional
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          vercel-args: "--prod"
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID}} #Required
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}} #Required
-          working-directory: .next
+          working-directory: ./
       - run: mkdir /tmp/artifacts
       # - name: Run Lighthouse
       #   uses: foo-software/lighthouse-check-action@master
