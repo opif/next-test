@@ -63,7 +63,7 @@ jobs:
             const formatResult = (result) => `## ${result.emulatedFormFactor}`;
 
 
-            lighthouseResults.data.map(result => )
+            //lighthouseResults.data.map(result => )
       - name: Post a friggin comment
         uses: marocchino/sticky-pull-request-comment@v2
         with:
