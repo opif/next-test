@@ -14,21 +14,21 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Check project
-        run: npm run lint --if-present
+        run: npm run lint
       - name: Build project
-        run: npm run build --if-present
+        run: npm run build
       - name: Test project
-        run: npm run test --if-present
+        run: npm run test
       - name: Deploy Preview to Vercel
         uses: amondnet/vercel-action@v20
         id: deploy-preview
         with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }} # Required
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-comment: false
           vercel-args: "--prod"
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID}} #Required
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}} #Required
           working-directory: ./
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
       - name: Post a friggin comment
         uses: marocchino/sticky-pull-request-comment@v2
         with:
