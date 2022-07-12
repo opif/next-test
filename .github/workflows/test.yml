@@ -32,7 +32,7 @@ jobs:
           vercel-args: "--prod" #Optional
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID}} #Required
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}} #Required
-          working-directory: ./
+          working-directory: .next
       - run: mkdir /tmp/artifacts
       # - name: Run Lighthouse
       #   uses: foo-software/lighthouse-check-action@master
