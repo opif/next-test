@@ -48,9 +48,22 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const comment = ${{ steps.lighthouse-report.outputs.lighthouseCheckResults }};
-            //const lighthouseResults = JSON.parse(comment);
-            console.log(comment);
+            const lighthouseResults = ${{ steps.lighthouse-report.outputs.lighthouseCheckResults }};
+            const badgeColors = [[90, 'brightgreen'], [80, 'yellow'], [50, 'orange']];
+            const scoreLabels = {
+              accessibility: 'Accessibility',
+              bestPractices: 'Best Practices',
+              performance: 'Performance',
+              progressiveWebApp: 'PWA',
+              seo: 'SEO',
+            };
+
+            const selectBadgeColor = (score) => badgeColors.find(([threshold, color]) => score >= threshold)?.[1] || 'red';
+            const createBadge = (label, score) => `![](https://img.shields.io/badge/${label}-${score}-${selectBadgeColor(score)}?style=flat-square)`;
+            const formatResult = (result) => `## ${result.emulatedFormFactor}`;
+
+
+            lighthouseResults.data.map(result => formatResult(result));
       - name: Post a friggin comment
         uses: marocchino/sticky-pull-request-comment@v2
         with:
@@ -58,8 +71,9 @@ jobs:
             Testing if ${{ github.sha }} for pr-${{ github.event.number }} worked well.
             The preview is available here: ${{ steps.deploy-preview.outputs.preview-url }};
 
-            Lighthouse Results: ${{ steps.lighthouse-report.outputs.lighthouseCheckResults }}
+            Lighthouse Results: ${{ steps.lighthouse-report.outputs }}
       - name: "Upload Lighthouse Artifacts"
+        id: upload-lighthouse
         uses: actions/upload-artifact@v3
         with:
           name: Lighthouse reports
