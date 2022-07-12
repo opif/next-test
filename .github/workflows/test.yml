@@ -48,11 +48,8 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const comment = `Lighthouse Report:
-            | Device      | Score |
-            | Performance | 100   |
-            `;
-            const lighthouseResults = JSON.parse('${{ toJSON(steps.lighthouse-report.outputs.lighthouseCheckResults) }}')
+            const comment = ${{ toJSON(steps.lighthouse-report.outputs.lighthouseCheckResults) }};
+            const lighthouseResults = JSON.parse(comment);
             console.log(lighthouseResults);
       - name: Post a friggin comment
         uses: marocchino/sticky-pull-request-comment@v2
