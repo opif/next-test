@@ -62,7 +62,7 @@ jobs:
             const createBadge = (label, score) => `![](https://img.shields.io/badge/${label}-${score}-${selectBadgeColor(score)}?style=flat-square)`;
             const formatResult = (result) => `## ${result.emulatedFormFactor}`;
 
-            lighthouseResults.data.map(result => )
+            lighthouseResults.data.map(result => 0)
 
             return '';
       - name: Post a friggin comment
