@@ -35,9 +35,10 @@ jobs:
           message: |
             Testing if ${{ github.sha }} for pr-${{ github.event.number }} worked well.
             The preview is available here: ${{ steps.deploy-preview.outputs.preview-url }};
-      - run: mkdir /tmp/artifacts
-      # - name: Run Lighthouse
-      #   uses: foo-software/lighthouse-check-action@master
-      #   with:
-      #     outputDirectory: /tmp/artifacts
-      #     urls: "https://www.foo.software,https://www.foo.software/contact"
+      - name: Run Lighthouse
+        run: mkdir /tmp/artifacts
+        uses: foo-software/lighthouse-check-action@master
+        with:
+          outputDirectory: /tmp/artifacts
+          device: all
+          urls: ${{ steps.deploy-preview.outputs.preview-url }};
