@@ -48,9 +48,9 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const comment = ${{ toJSON(steps.lighthouse-report.outputs.lighthouseCheckResults) }};
-            const lighthouseResults = JSON.parse(comment);
-            console.log(lighthouseResults);
+            const comment = ${{ steps.lighthouse-report.outputs.lighthouseCheckResults }};
+            //const lighthouseResults = JSON.parse(comment);
+            console.log(comment);
       - name: Post a friggin comment
         uses: marocchino/sticky-pull-request-comment@v2
         with:
