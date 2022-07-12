@@ -24,11 +24,10 @@ jobs:
         id: deploy-preview
         with:
           github-comment: false
-          vercel-args: "--prod"
           working-directory: ./
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
       - name: Post a friggin comment
         uses: marocchino/sticky-pull-request-comment@v2
         with:
