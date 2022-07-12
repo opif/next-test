@@ -52,8 +52,7 @@ jobs:
             | Device      | Score |
             | Performance | 100   |
             `
-            console.log(comment);
-            console.log(JSON.stringify(context));
+            console.log(JSON.stringify(core));
       - name: Post a friggin comment
         uses: marocchino/sticky-pull-request-comment@v2
         with:
