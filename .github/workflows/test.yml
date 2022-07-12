@@ -36,12 +36,12 @@ jobs:
           message: |
             Testing if ${{ github.sha }} for pr-${{ github.event.number }} worked well.
             The preview is available here: ${{ steps.deploy-preview.outputs.preview-url }};
-      - run: mkdir ${{ LIGHTHOUSE_ARTIFACTS_PATH }}
+      - run: mkdir $LIGHTHOUSE_ARTIFACTS_PATH
       - name: Run Lighthouse
         id: lighthouse-report
         uses: foo-software/lighthouse-check-action@master
         with:
-          outputDirectory: ${{ LIGHTHOUSE_ARTIFACTS_PATH }}
+          outputDirectory: $LIGHTHOUSE_ARTIFACTS_PATH
           device: all
           urls: ${{ steps.deploy-preview.outputs.preview-url }}
       - name: Post a friggin comment \#2
@@ -56,5 +56,5 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: Lighthouse reports
-          path: ${{ LIGHTHOUSE_ARTIFACTS_PATH }}
+          path: $LIGHTHOUSE_ARTIFACTS_PATH
           retention-days: 5
