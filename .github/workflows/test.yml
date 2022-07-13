@@ -42,7 +42,7 @@ jobs:
         with:
           outputDirectory: ${{ env.LIGHTHOUSE_ARTIFACTS_PATH }}
           device: all
-          urls: ${{ steps.deploy-preview.outputs.preview-url }}
+          urls: ${{ steps.deploy-preview.outputs.preview-url }}, ${{ steps.deploy-preview.outputs.preview-url }}/404
       - name: Format Scores for Comment
         id: format-lighthouse-report
         uses: actions/github-script@v6
@@ -61,8 +61,8 @@ jobs:
             const selectBadgeColor = (score) => badgeColors.find(([threshold, color]) => score >= threshold)?.[1] || 'red';
             const createBadge = (label, score) => `![](https://img.shields.io/badge/${ label.replace(' ', '_') }-${ score }-${ selectBadgeColor(score) }?style=flat-square)`;
             const formatScore = ([name, score]) => createBadge(scoreLabels[name], score);
-            const formatDeviceScores = (([deviceType, scores]) => `${ deviceType }: ${ Object.entries(scores).map(formatScore).join(' ') }`);
-            const formatResults = ([url, deviceScores]) => `*Lighthouse results for ${ url }:*
+            const formatDeviceScores = (([deviceType, scores]) => `**${ deviceType }:**\n${ Object.entries(scores).map(formatScore).join(' ') }`);
+            const formatResults = ([url, deviceScores]) => `*⛯ Lighthouse results for ${ url }:*
               ${ Object.entries(deviceScores).map(formatDeviceScores).join('\n') }
             `;
 
