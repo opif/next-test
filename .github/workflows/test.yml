@@ -86,7 +86,7 @@ jobs:
           message: |
             🚀 Preview has been built and is available here: ${{ steps.deploy-preview.outputs.preview-url }} 🚀
 
-            ${{ steps.format-lighthouse-report.outputs }}
+            ${{ toJSON(steps.format-lighthouse-report.outputs) }}
 
             Lighthouse Results: ${{ steps.lighthouse-report.outputs.lighthouseCheckResults }}
       - name: "Upload Lighthouse Artifacts"
