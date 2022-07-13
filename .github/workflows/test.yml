@@ -34,8 +34,7 @@ jobs:
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           message: |
-            Testing if ${{ github.sha }} for pr-${{ github.event.number }} worked well.
-            The preview is available here: ${{ steps.deploy-preview.outputs.preview-url }};
+            Preview has been built and is available here: ${{ steps.deploy-preview.outputs.preview-url }}
       - run: mkdir -p "$LIGHTHOUSE_ARTIFACTS_PATH"
       - name: Run Lighthouse
         id: lighthouse-report
@@ -48,8 +47,9 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
+            const previewUrl = "${{ steps.deploy-preview.outputs.preview-url }}";
             const lighthouseResults = ${{ steps.lighthouse-report.outputs.lighthouseCheckResults }};
-            const badgeColors = [[90, 'brightgreen'], [80, 'yellow'], [50, 'orange']];
+            const badgeColors = [[90, '🟢'], [80, '🟡'], [50, '🟠']];
             const scoreLabels = {
               accessibility: 'Accessibility',
               bestPractices: 'Best Practices',
@@ -58,13 +58,15 @@ jobs:
               seo: 'SEO',
             };
 
-            const selectBadgeColor = (score) => badgeColors.find(([threshold, color]) => score >= threshold)?.[1] || 'red';
-            const createBadge = (label, score) => `![](https://img.shields.io/badge/${ label.replace(' ', '_') }-${ score }-${ selectBadgeColor(score) }?style=flat-square)`;
+            const selectBadgeColor = (score) => badgeColors.find(([threshold, color]) => score >= threshold)?.[1] || '🔴';
+            //const createBadge = (label, score) => `![](https://img.shields.io/badge/${ label.replace(' ', '_') }-${ score }-${ selectBadgeColor(score) }?style=flat-square)`;
+            const createBadge = () => 0;
             const formatResult = (result) => `## ${result.emulatedFormFactor}`;
 
-            lighthouseResults.data.map(result => )
+            const  lighthouseResults.data.map(result => 0);
 
             return '';
+          result-encoding: string
       - name: Post a friggin comment
         uses: marocchino/sticky-pull-request-comment@v2
         with:
