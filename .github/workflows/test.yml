@@ -42,7 +42,7 @@ jobs:
         with:
           outputDirectory: ${{ env.LIGHTHOUSE_ARTIFACTS_PATH }}
           device: all
-          urls: ${{ steps.deploy-preview.outputs.preview-url }}, ${{ steps.deploy-preview.outputs.preview-url }}/404
+          urls: ${{ steps.deploy-preview.outputs.preview-url }}
       - name: Format Scores for Comment
         id: format-lighthouse-report
         uses: actions/github-script@v6
@@ -58,6 +58,10 @@ jobs:
               seo: 'SEO',
             };
 
+            if (lighthouseResults.code !== 'SUCCESS') {
+              return `Lighthouse error, dump: ${ JSON.stringify(lighthouseResults) }`;
+            }
+
             const selectBadgeColor = (score) => badgeColors.find(([threshold, color]) => score >= threshold)?.[1] || 'red';
             const createBadge = (label, score) => `![](https://img.shields.io/badge/${ label.replace(' ', '_') }-${ score }-${ selectBadgeColor(score) }?style=flat-square)`;
             const formatScore = ([name, score]) => createBadge(scoreLabels[name], score);
@@ -69,6 +73,7 @@ jobs:
             const groupedScores = lighthouseResults.data.reduce((acc, result) => {
               const deviceType = result.emulatedFormFactor;
               const urlScores = acc[result.url] || {};
+
               acc[result.url] = {
                 ...urlScores,
                 [deviceType]: result.scores,
@@ -88,7 +93,7 @@ jobs:
 
             ${{ steps.format-lighthouse-report.outputs.result }}
 
-            Lighthouse Results: ${{ steps.lighthouse-report.outputs.lighthouseCheckResults }}
+            *Full test reports will be saved as artifacts in the GitHub action summary*
       - name: "Upload Lighthouse Artifacts"
         id: upload-lighthouse
         uses: actions/upload-artifact@v3
