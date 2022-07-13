@@ -63,7 +63,7 @@ jobs:
             const createBadge = () => 0;
             const formatResult = (result) => `## ${result.emulatedFormFactor}`;
 
-            const  lighthouseResults.data.map(result => 0);
+            const results = lighthouseResults.data.map(result => 0);
 
             return '';
           result-encoding: string
