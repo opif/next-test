@@ -34,7 +34,7 @@ jobs:
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           message: |
-            Preview has been built and is available here: ${{ steps.deploy-preview.outputs.preview-url }}
+            🚀 Preview has been built and is available here: ${{ steps.deploy-preview.outputs.preview-url }} 🚀
       - run: mkdir -p "$LIGHTHOUSE_ARTIFACTS_PATH"
       - name: Run Lighthouse
         id: lighthouse-report
@@ -44,12 +44,12 @@ jobs:
           device: all
           urls: ${{ steps.deploy-preview.outputs.preview-url }}
       - name: Format Scores for Comment
+        id: format-lighthouse-scores
         uses: actions/github-script@v6
         with:
           script: |
-            const previewUrl = "${{ steps.deploy-preview.outputs.preview-url }}";
             const lighthouseResults = ${{ steps.lighthouse-report.outputs.lighthouseCheckResults }};
-            const badgeColors = [[90, '🟢'], [80, '🟡'], [50, '🟠']];
+            const badgeColors = [[90, 'brightgreen'], [80, 'yellow'], [50, 'orange']];
             const scoreLabels = {
               accessibility: 'Accessibility',
               bestPractices: 'Best Practices',
@@ -58,14 +58,27 @@ jobs:
               seo: 'SEO',
             };
 
-            const selectBadgeColor = (score) => badgeColors.find(([threshold, color]) => score >= threshold)?.[1] || '🔴';
-            //const createBadge = (label, score) => `![](https://img.shields.io/badge/${ label.replace(' ', '_') }-${ score }-${ selectBadgeColor(score) }?style=flat-square)`;
-            const createBadge = () => 0;
-            const formatResult = (result) => `## ${result.emulatedFormFactor}`;
+            const selectBadgeColor = (score) => badgeColors.find(([threshold, color]) => score >= threshold)?.[1] || 'red';
+            const createBadge = (label, score) => `![](https://img.shields.io/badge/${ label.replace(' ', '_') }-${ score }-${ selectBadgeColor(score) }?style=flat-square)`;
+            const formatScore = ([name, score]) => createBadge(scoreLabels[name], score);
+            const formatDeviceScores = (([deviceType, scores]) => `${ deviceType }: ${ scores.entries().map(formatScore).join(' '); }`);
+            const formatResults = ([url, deviceScores]) => `*Lighthouse results for ${ url }:*
+              ${ deviceScores.entries().map(formatDeviceScores).join('\n'); }
+            `;
 
-            const results = lighthouseResults.data.map(result => 0);
+            const groupedScores = lighthouseResults.data.reduce((acc, result) => {
+              const deviceType = result.emulatedFormFactor;
+              const urlScores = acc[result.url] || {};
+              acc[result.url] = {
+                ...urlScores,
+                [deviceType]: result.scores,
+              };
 
-            return '';
+              return acc;
+            }, {});
+
+
+            return groupedScores.entries().map(formatResults).join('\n\n');
           result-encoding: string
       - name: Post a friggin comment
         uses: marocchino/sticky-pull-request-comment@v2
