@@ -44,7 +44,7 @@ jobs:
           device: all
           urls: ${{ steps.deploy-preview.outputs.preview-url }}
       - name: Format Scores for Comment
-        id: format-lighthouse-scores
+        id: format-lighthouse-report
         uses: actions/github-script@v6
         with:
           script: |
@@ -84,8 +84,9 @@ jobs:
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           message: |
-            Testing if ${{ github.sha }} for pr-${{ github.event.number }} worked well.
-            The preview is available here: ${{ steps.deploy-preview.outputs.preview-url }};
+            🚀 Preview has been built and is available here: ${{ steps.deploy-preview.outputs.preview-url }} 🚀
+
+            ${{ steps.format-lighthouse-report.outputs.lighthouseCheckResults }}
 
             Lighthouse Results: ${{ steps.lighthouse-report.outputs.lighthouseCheckResults }}
       - name: "Upload Lighthouse Artifacts"
