@@ -61,9 +61,9 @@ jobs:
             const selectBadgeColor = (score) => badgeColors.find(([threshold, color]) => score >= threshold)?.[1] || 'red';
             const createBadge = (label, score) => `![](https://img.shields.io/badge/${ label.replace(' ', '_') }-${ score }-${ selectBadgeColor(score) }?style=flat-square)`;
             const formatScore = ([name, score]) => createBadge(scoreLabels[name], score);
-            const formatDeviceScores = (([deviceType, scores]) => `${ deviceType }: ${ scores.entries().map(formatScore).join(' ') }`);
+            const formatDeviceScores = (([deviceType, scores]) => `${ deviceType }: ${ Object.entries(scores).map(formatScore).join(' ') }`);
             const formatResults = ([url, deviceScores]) => `*Lighthouse results for ${ url }:*
-              ${ deviceScores.entries().map(formatDeviceScores).join('\n') }
+              ${ Object.entries(deviceScores).map(formatDeviceScores).join('\n') }
             `;
 
             const groupedScores = lighthouseResults.data.reduce((acc, result) => {
@@ -78,7 +78,7 @@ jobs:
             }, {});
 
 
-            return groupedScores.entries().map(formatResults).join('\n\n');
+            return Object.entries(groupedScores).map(formatResults).join('\n\n');
           result-encoding: string
       - name: Post a friggin comment
         uses: marocchino/sticky-pull-request-comment@v2
